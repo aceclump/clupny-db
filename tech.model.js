@@ -10,10 +10,6 @@ const connection = mysql.createConnection({
 });
 
 // open the MySQL connection
-connection.connect(error => {
-  if (error) throw error;
-  console.log("Successfully connected to the database.");
-});
 
 const Tech = function(tech) {
   this.id=tech.id;
@@ -35,7 +31,7 @@ Tech.verbose = (tech) => {
   return(
     "id = " + tech.id + ", " +
     "name = '" + tech.name + "', " +
-    "picture_paths_prototype = '" + tech.picture_path + "' " 
+    "picture_path = '" + tech.picture_path + "' " 
   )
 }
 
