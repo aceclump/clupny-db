@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var projects = require("../project.model.js");
+var projects = require("../../project.model.js");
 
 router.get('/', function(req, res) {
   projects.getAll((err, data) => {

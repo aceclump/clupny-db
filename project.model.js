@@ -18,47 +18,56 @@ connection.connect(error => {
 const Project = function(project) {
   this.id=project.id;
   this.name=project.name;
-  this.desc_short=project.desc_short;
+  this.description=project.description;
   this.purpose=project.purpose;
   this.results=project.results;
   this.picture_paths_prototype=project.picture_paths_prototype;
   this.picture_paths_results=project.picture_paths_results;
-  this.picture_primary=project.picture_primary;
   this.tech_ids=project.tech_ids;
 }
 
-Project.getById = (id, result) => {
-  connection.query(`SELECT * FROM projects WHERE id = ${id}`, (err, res) => {
+Project.makeDbCall = (query, result) => {
+  connection.query(query, (err, res) => {
     if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-
-    if (res.length) {
-      console.log("found customer: ", res[0]);
-      result(null, res[0]);
-      return;
-    }
-
-    // not found Customer with the id
-    result({ id: "not_found" }, null);
-  });
-}
-
-Project.getAll = result => {
-  connection.query("SELECT * FROM projects", (err, res) => {
-    if (err) {
-      console.log("error: ", err);
       result(null, err);
       return;
     }
-
-    console.log("customers: ", res);
     result(null, res);
   });
 }
 
+Project.verbose = (project) => {
+  return(
+    "id = " + project.id + ", " +
+    "name = '" + project.name + "', " +
+    "description = '" + project.description + "', " +
+    "purpose = '" + project.purpose + "', " +
+    "results = '" + project.results + "', " +
+    "picture_paths_prototype = '" + project.picture_paths_prototype + "', " +
+    "picture_paths_results = '" + project.picture_paths_results + "', " +
+    "tech_ids = '" + project.tech_ids + "' "
+  )
+}
+
+Project.updateProject = (id, project, result) => {
+  Project.makeDbCall(
+      "UPDATE projects SET " + Project.verbose(project) + 
+      "WHERE id = " + id,
+      result
+    )
+}
+
+Project.createProject = (project, result) => {
+  Project.makeDbCall("INSERT INTO projects SET " + Project.verbose(project), result)
+}
+
+Project.deleteProject = (id, result) => {
+  Project.makeDbCall(("DELETE FROM projects WHERE id = " + id), result)
+}
+
+Project.getAll = result => {Project.makeDbCall("SELECT * FROM projects", result)}
+
+Project.getProject = (id, result) => {Project.makeDbCall(('SELECT * FROM projects WHERE id = ' + id), result)}
 
 
 module.exports = Project;
