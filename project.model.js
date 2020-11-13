@@ -37,6 +37,7 @@ Project.makeDbCall = (query, result) => {
 }
 
 Project.verbose = (project) => {
+  console.log(project.tech_ids)
   return(
     "id = " + project.id + ", " +
     "name = '" + project.name + "', " +
